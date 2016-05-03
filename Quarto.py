@@ -2,15 +2,15 @@
 # -*-coding:utf-8 -*
 
 from Start import *
-from Affichage_jeu import *
+from Main_game_display import *
 
 
 if __name__ == "__main__":
-    ecran_demarrage = Start(None)
-    ecran_demarrage.title('Quarto')
-    ecran_demarrage.mainloop()
-    joueur1 = ecran_demarrage.nom_joueur1.get()
-    joueur2 = ecran_demarrage.nom_joueur2.get()
-    ecran_jeu = Affichage_jeu(None, joueur1, joueur2)
-    ecran_jeu.title('Quarto')
-    ecran_jeu.mainloop()
+    startScreen = Start(None)
+    startScreen.title('Quarto')
+    startScreen.mainloop()
+    player1 = startScreen.name_player1.get()
+    player2 = startScreen.name_player2.get()
+    mainGame = Main_game_display(None, player1, player2)
+    mainGame.title('Quarto')
+    mainGame.mainloop()

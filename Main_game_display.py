@@ -6,46 +6,46 @@ from Board import *
 from Piece import *
 
 
-class Affichage_jeu(tkinter.Tk):
+class Main_game_display(tkinter.Tk):
 
-    def __init__(self, parent, joueur1, joueur2):
+    def __init__(self, parent, player1, player2):
         tkinter.Tk.__init__(self, parent)
         self.parent = parent
-        self.initialize(joueur1, joueur2)
+        self.initialize(player1, player2)
 
-    def initialize(self, joueur1, joueur2):
-        # joueur_main est le joueur qui joue
-        self.joueur1 = joueur1
-        self.joueur2 = joueur2
-        self.joueur_main = self.joueur1
+    def initialize(self, player1, player2):
+        # player_main is the main player
+        self.player1 = player1
+        self.player2 = player2
+        self.player_main = self.player1
         self.grid()
-        # définition des pieces et de la zone de board
-        self.definir_pieces()
-        self.definir_board()
-        # selection donne le piece sélectionné
-        # par défaut aucun piece n'est sélectionné
+        # definition of pieces and board area
+        self.define_pieces()
+        self.define_board()
+        # selection of the a piece
+        # By default no piece is selectioned
         self.selection = 16
-        self.piece_choisi = Piece()
-        # textes et boutons du jeu
-        self.titre = tkinter.Label(self, text=u"Quarto")
-        self.titre.grid(column=0, row=0, columnspan=7)
-        self.texte_instruction = tkinter.StringVar()
-        self.texte_instruction.set("{}, sélectionnez un piece et cliquez \
-sur SELECTIONNER".format(self.joueur_main))
+        self.pieceChosen = Piece()
+        # texts and butons of the game
+        self.topTitle = tkinter.Label(self, text=u"Quarto")
+        self.topTitle.grid(column=0, row=0, columnspan=7)
+        self.text_instruction = tkinter.StringVar()
+        self.text_instruction.set("{}, select a piece and click \
+on SELECT".format(self.player_main))
         self.instruction = tkinter.Label(self,
-                                         textvariable=self.texte_instruction)
+                                         textvariable=self.text_instruction)
         self.instruction.grid(column=0, columnspan=6, row=6)
         self.instruction_selec = tkinter.Label(self,
-                                               text=u"Pièce sélectionnée :")
+                                               text=u"Piece selected :")
         self.instruction_selec.grid(column=0, columnspan=2, row=9)
         self.image_selec = self.image_empty
         self.canvas_selec = tkinter.Canvas(self, width=60, height=60)
         self.canvas_selec.create_image(30, 30, image=self.image_selec)
         self.canvas_selec.grid(column=3, row=9)
-        self.bouton_selec = tkinter.Button(self,
-                                           text=u"SELECTIONNER",
-                                           command=self.selectionner)
-        self.bouton_selec.grid(column=4, columnspan=2, row=9)
+        self.button_selec = tkinter.Button(self,
+                                           text=u"SELECT",
+                                           command=self.select)
+        self.button_selec.grid(column=4, columnspan=2, row=9)
         self.geometry('{}x{}'.format(650, 600))
         self.gridsize()
         self.resizable(width=False, height=False)
@@ -71,24 +71,24 @@ sur SELECTIONNER".format(self.joueur_main))
         self.rowconfigure(8, minsize=60)
         self.rowconfigure(9, minsize=60)
 
-    def definir_board(self):
+    def define_board(self):
         self.board = Board()
-        self.bouton_square = []
+        self.button_square = []
         self.image_square = []
         self.image_empty = tkinter.PhotoImage(file='empty.gif')
         i = 0
         while i < 16:
             self.image_square.append(self.image_empty)
-            self.bouton_square.append(tkinter.Button(
-                                                   self))
-            self.bouton_square[i].config(
+            self.button_square.append(tkinter.Button(
+                                                     self))
+            self.button_square[i].config(
                                        image=self.image_square[i],
-                                       command=lambda i=i: self.poser_piece(i),
+                                       command=lambda i=i: self.put_piece(i),
                                        width="60", height="60")
-            self.bouton_square[i].grid(column=(i % 4)+1, row=(i//4)+2)
+            self.button_square[i].grid(column=(i % 4)+1, row=(i//4)+2)
             i += 1
 
-    def definir_pieces(self):
+    def define_pieces(self):
         self.v = tkinter.IntVar()
         self.v.set(16)
         self.pieces = []
@@ -96,57 +96,57 @@ sur SELECTIONNER".format(self.joueur_main))
         i = 0
         while i < 16:
             self.pieces.append(tkinter.Radiobutton(
-                                                  self, variable=self.v,
-                                                  indicatoron=0,
-                                                  value=i))
+                                                   self, variable=self.v,
+                                                   indicatoron=0,
+                                                   value=i))
             self.pieces[i].grid(column=6+(i//8), row=(i % 8)+2)
-            image_a_charger = 'Piece' + str(i) + '.gif'
-            self.image_pieces.append(tkinter.PhotoImage(file=image_a_charger))
+            imageToLoad = 'Piece' + str(i) + '.gif'
+            self.image_pieces.append(tkinter.PhotoImage(file=imageToLoad))
             self.pieces[i].config(
                                  image=self.image_pieces[i],
                                  width="60", height="60")
             self.pieces[i].grid(column=6+(i//8), row=(i % 8)+2)
             i += 1
 
-    def poser_piece(self, i):
+    def put_piece(self, i):
         if self.selection < 16:
-            self.piece_choisi = self.board.liste_pieces[self.selection]
+            self.pieceChosen = self.board.list_pieces[self.selection]
             self.image_square[i] = self.image_pieces[self.selection]
-            self.bouton_square[i].configure(image=self.image_square[i],
+            self.button_square[i].configure(image=self.image_square[i],
                                             state='disabled')
-            self.texte_instruction.set("{}, veuillez maintenant choisir \
-le prochain piece à jouer.".format(self.joueur_main))
-            self.bouton_selec.config(state='normal')
+            self.text_instruction.set("{}, now, please choose \
+the next piece to play.".format(self.player_main))
+            self.button_selec.config(state='normal')
             self.image_selec = self.image_empty
             self.canvas_selec.create_image(30, 30, image=self.image_selec)
             self.selection = 16
             # mise à jour du board
-            self.board.poser_piece(i // 4+1, i % 4+1, self.piece_choisi)
-            # test de victoire
-            self.victoire()
+            self.board.put_piece(i // 4+1, i % 4+1, self.pieceChosen)
+            # test de victory
+            self.victory()
 
-    def selectionner(self):
+    def select(self):
         self.selection = self.v.get()
         if self.selection < 16:
-            self.changer_joueur()
-            self.texte_instruction.set("{}, veuillez placer le piece \
-sélectionné sur le board.".format(self.joueur_main))
+            self.change_player()
+            self.text_instruction.set("{}, Please put the selected \
+piece on the board.".format(self.player_main))
             self.image_selec = self.image_pieces[self.selection]
             self.canvas_selec.create_image(30, 30, image=self.image_selec)
-            self.bouton_selec.config(state='disabled')
+            self.button_selec.config(state='disabled')
             self.pieces[self.selection].destroy()
             self.v.set(16)
 
-    def changer_joueur(self):
-        if self.joueur_main is self.joueur1:
-            self.joueur_main = self.joueur2
+    def change_player(self):
+        if self.player_main is self.player1:
+            self.player_main = self.player2
         else:
-            self.joueur_main = self.joueur1
+            self.player_main = self.player1
 
-    def victoire(self):
-        if self.board.test_victoire():
-            self.texte_instruction.set("BRAVO {}, vous \
-avez gagné.".format(self.joueur_main))
+    def victory(self):
+        if self.board.test_victory():
+            self.text_instruction.set("CONGRATULATION {}, you \
+won.".format(self.player_main))
 
     def quit(self):
         self.destroy()
