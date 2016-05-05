@@ -38,11 +38,15 @@ class Board:
                             Piece("black", "tall", "round", "full"),
                             Piece("black", "tall", "square", "empty"),
                             Piece("black", "tall", "square", "full")]
+        self.piecesPlayed = []
+        self.piecesRemaining = list(self.list_pieces)
 
     def put_piece(self, x, y, piece):
         """put a piece at x,y"""
         if self.square_empty(x, y):
             self.square[x-1+(y-1)*4].state = piece
+            self.piecesPlayed.append(piece)
+            self.piecesRemaining.remove(piece)
         else:
             raise AssertionError
 
@@ -131,3 +135,11 @@ class Board:
             if square.state is None:
                 board_full = False
         return board_full
+
+    def free_square(self):
+        listFreeSquare = []
+        for square in self.square:
+            if square.state is None:
+                listFreeSquare.append((square.coor_x, square.coor_y))
+        return listFreeSquares
+

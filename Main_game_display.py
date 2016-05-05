@@ -120,9 +120,9 @@ the next piece to play.".format(self.player_main))
             self.image_selec = self.image_empty
             self.canvas_selec.create_image(30, 30, image=self.image_selec)
             self.selection = 16
-            # mise à jour du board
+            # update of the board
             self.board.put_piece(i // 4+1, i % 4+1, self.pieceChosen)
-            # test de victory
+            # victory test
             self.victory()
 
     def select(self):

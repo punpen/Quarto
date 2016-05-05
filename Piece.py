@@ -56,38 +56,6 @@ the 4-tuple (0,0,0,0) is the white piece, small, round and empty
         else:
             return 1
 
-    """def __repr__(self):
-        ligne = []
-        ligne_1 = self.symbole_color() + self.symbole_size()
-        ligne_2 = self.symbole_shape() + self.symbole_contain()
-        ligne.append(ligne_1)
-        ligne.append(ligne_2)
-        return "\n".join(ligne)
-
-    def symbole_color(self):
-        if self.color == "white":
-            return"B"
-        else:
-            return"N"
-
-    def symbole_size(self):
-        if self.size == "small":
-            return"P"
-        else:
-            return"G"
-
-    def symbole_shape(self):
-        if self.shape == "round":
-            return"R"
-        else:
-            return"C"
-
-    def symbole_contain(self):
-        if self.contain == "empty":
-            return"O"
-        else:
-            return"X"""
-
     def _get_color(self):
         return self._color
 
@@ -134,6 +102,12 @@ the 4-tuple (0,0,0,0) is the white piece, small, round and empty
             self._resume = self.create_resume()
         except AssertionError:
             print("The piece is not well defined")
+
+    def __eq__(self, pieceToCompare):
+        if self.resume == pieceToCompare.resume:
+            return True
+        else:
+            return False
 
     color = property(_get_color, _set_color)
     size = property(_get_size, _set_size)

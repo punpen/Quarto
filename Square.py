@@ -38,18 +38,6 @@ class Square:
         else:
             return False
 
-    """def ligne1(self):
-        if self.est_vide():
-            return "  "
-        else:
-            return self.state.symbole_color() + self.state.symbole_taille()
-
-    def ligne2(self):
-        if self.est_vide():
-            return "  "
-        else:
-            return self.state.symbole_forme() + self.state.symbole_contenant()"""
-
     coor_x = property(_get_coor_x)
     coor_y = property(_get_coor_y)
     state = property(_get_state, _set_state)
