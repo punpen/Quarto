@@ -8,23 +8,23 @@ class Square:
     """Define a square from the board of the Quarto game
 
     Parameters nammed :
-    coor_x : horizontal position (between 1 et 4)
-    coor_y : verticale position (between 1 et 4)
+    coor_r : row number (between 1 et 4)
+    coor_c : column number (between 1 et 4)
     state : which piece in the square. value=None if there is no piece
 
 """
 
-    def __init__(self, x, y):
-        """coordonnate x and y, the square starts empty"""
-        self._coor_x = x
-        self._coor_y = y
+    def __init__(self, r, c):
+        """r and c number, the square starts empty"""
+        self._coor_r = r
+        self._coor_c = c
         self._state = None
 
-    def _get_coor_x(self):
-        return self._coor_x
+    def _get_coor_r(self):
+        return self._coor_r
 
-    def _get_coor_y(self):
-        return self._coor_y
+    def _get_coor_c(self):
+        return self._coor_c
 
     def _get_state(self):
         return self._state
@@ -38,6 +38,6 @@ class Square:
         else:
             return False
 
-    coor_x = property(_get_coor_x)
-    coor_y = property(_get_coor_y)
+    coor_r = property(_get_coor_r)
+    coor_c = property(_get_coor_c)
     state = property(_get_state, _set_state)

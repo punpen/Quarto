@@ -4,6 +4,7 @@
 import tkinter
 from Board import *
 from Piece import *
+from QTree import *
 
 
 class Main_game_display(tkinter.Tk):
@@ -25,7 +26,7 @@ class Main_game_display(tkinter.Tk):
         # selection of the a piece
         # By default no piece is selectioned
         self.selection = 16
-        self.pieceChosen = Piece()
+        self.chosenPiece = Piece()
         # texts and butons of the game
         self.topTitle = tkinter.Label(self, text=u"Quarto")
         self.topTitle.grid(column=0, row=0, columnspan=7)
@@ -110,7 +111,7 @@ on SELECT".format(self.player_main))
 
     def put_piece(self, i):
         if self.selection < 16:
-            self.pieceChosen = self.board.list_pieces[self.selection]
+            self.chosenPiece = self.board.list_pieces[self.selection]
             self.image_square[i] = self.image_pieces[self.selection]
             self.button_square[i].configure(image=self.image_square[i],
                                             state='disabled')
@@ -121,13 +122,14 @@ the next piece to play.".format(self.player_main))
             self.canvas_selec.create_image(30, 30, image=self.image_selec)
             self.selection = 16
             # update of the board
-            self.board.put_piece(i // 4+1, i % 4+1, self.pieceChosen)
+            self.board.put_piece(i//4+1, i % 4+1, self.chosenPiece)
             # victory test
             self.victory()
 
     def select(self):
         self.selection = self.v.get()
         if self.selection < 16:
+            # at this point, the main player changes
             self.change_player()
             self.text_instruction.set("{}, Please put the selected \
 piece on the board.".format(self.player_main))
@@ -136,6 +138,10 @@ piece on the board.".format(self.player_main))
             self.button_selec.config(state='disabled')
             self.pieces[self.selection].destroy()
             self.v.set(16)
+            # AI MODE
+            # in case of AI mode chosen
+            if (self.player_main == "ai"):
+                self.aiTurn()
 
     def change_player(self):
         if self.player_main is self.player1:
@@ -147,6 +153,23 @@ piece on the board.".format(self.player_main))
         if self.board.test_victory():
             self.text_instruction.set("CONGRATULATION {}, you \
 won.".format(self.player_main))
+
+    def aiTurn(self):
+        self.chosenPiece = self.board.list_pieces[self.selection]
+        # The AI evaluates possibilities for its next move
+        self.moveChoice = QTree(self.board, "square",
+                                chosenPiece=self.chosenPiece)
+        self.moveChoice.add_level()
+        self.moveChoice.update_score()
+        self.bestChoice = self.moveChoice.leaf[0]
+        for leaf in self.moveChoice.leaf:
+            if leaf.score > self.bestChoice.score:
+                self.bestChoice = leaf
+        # Bestchoice is the best move to play. The AI plays
+        self.put_piece(self.bestChoice.chosenSquare)
+        firstPieceAvailable = self.board.piecesRemaining[0]
+        self.v.set(firstPieceAvailable.get_piece_id())
+        self.select()
 
     def quit(self):
         self.destroy()

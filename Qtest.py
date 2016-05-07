@@ -25,5 +25,6 @@ if not (True and True and False):
     print("a")
 else:
     print("b")
-
-
+i = 4
+print(2**0)
+print(2**1)

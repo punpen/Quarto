@@ -41,10 +41,10 @@ class Board:
         self.piecesPlayed = []
         self.piecesRemaining = list(self.list_pieces)
 
-    def put_piece(self, x, y, piece):
-        """put a piece at x,y"""
-        if self.square_empty(x, y):
-            self.square[x-1+(y-1)*4].state = piece
+    def put_piece(self, r, c, piece):
+        """put a piece at r,c"""
+        if self.square_empty(r, c):
+            self.square[c-1+(r-1)*4].state = piece
             self.piecesPlayed.append(piece)
             self.piecesRemaining.remove(piece)
         else:
@@ -120,10 +120,10 @@ class Board:
             test = True
         return test
 
-    def square_empty(self, x, y):
-        """ return True if the square x,y is empty"""
-        # x-1+(y-1)*4 convert the position in the square number
-        if self.square[x-1+(y-1)*4].state is None:
+    def square_empty(self, r, c):
+        """ return True if the square r,c is empty"""
+        # c-1+(r-1)*4 convert the position in the square number
+        if self.square[c-1+(r-1)*4].state is None:
             return True
         else:
             return False
@@ -140,6 +140,6 @@ class Board:
         listFreeSquare = []
         for square in self.square:
             if square.state is None:
-                listFreeSquare.append((square.coor_x, square.coor_y))
-        return listFreeSquares
+                listFreeSquare.append((square.coor_r, square.coor_c))
+        return listFreeSquare
 

@@ -103,6 +103,19 @@ the 4-tuple (0,0,0,0) is the white piece, small, round and empty
         except AssertionError:
             print("The piece is not well defined")
 
+    def get_piece_id(self):
+        """
+            get the number of a piece in the table list_pieces
+            id is 0 for (0,0,0,0) then increase to 15 for (1,1,1,1)
+            method used : convert bynary in base-10
+        """
+        i = 0
+        pieceId = 0
+        while i < 4:
+            pieceId += self.resume[3-i]*(2 ** i)
+            i += 1
+        return pieceId
+
     def __eq__(self, pieceToCompare):
         if self.resume == pieceToCompare.resume:
             return True
