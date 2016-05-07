@@ -169,16 +169,23 @@ won.".format(self.player_main))
         self.moveChoice = QTree(self.board, "square",
                                 chosenPiece=self.chosenPiece)
         self.moveChoice.add_level()
+        self.moveChoice.add_level()
+        self.moveChoice.add_level()
         self.moveChoice.update_score()
         self.bestChoice = self.moveChoice.leaf[0]
         for leaf in self.moveChoice.leaf:
             if leaf.score > self.bestChoice.score:
                 self.bestChoice = leaf
-        # Bestchoice is the best move to play. The AI plays
+        # bestChoice is the best move to play. The AI plays
         self.put_piece(self.bestChoice.chosenSquare)
         if not self.board.test_victory():
-            firstPieceAvailable = self.board.piecesRemaining[0]
-            self.v.set(firstPieceAvailable.get_piece_id())
+            # bestPiece is the best situation for a piece selection
+            # bestPiece is not a piece but a Qtree !
+            self.bestPiece = self.bestChoice.leaf[0]
+            for leaf in self.bestChoice.leaf:
+                if leaf.score > self.bestPiece.score:
+                    self.bestPiece = leaf
+            self.v.set(self.bestPiece.chosenPiece.get_piece_id())
             self.select()
 
     def quit(self):

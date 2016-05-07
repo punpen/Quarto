@@ -66,12 +66,13 @@ class QTree:
                     tempBoard = copy.deepcopy(self.currentBoard)
                     tempBoard.put_piece(r, c, self.chosenPiece)
                     tempQTree = QTree(tempBoard, "piece",
-                                      chosenSquare=c-1+(r-1)*4)
+                                      chosenSquare=c-1+(r-1)*4,
+                                      aiTurn=self.aiTurn)
                     nextTurnPoss.append(tempQTree)
         elif self.leafType is "piece":
             for piece in self.currentBoard.piecesRemaining:
                 tempQTree = QTree(self.currentBoard, "square",
-                                  chosenPiece=piece, aiTurn=not aiTurn)
+                                  chosenPiece=piece, aiTurn=not self.aiTurn)
                 nextTurnPoss.append(tempQTree)
         else:
             raise NameError
@@ -83,8 +84,13 @@ class QTree:
         """
         if not (self.currentBoard.full() or self.currentBoard.test_victory()):
             if self.leaf:
+                nextStageNeeded = True
                 for leaf in self.leaf:
-                    leaf.add_level()
+                    if leaf.currentBoard.test_victory():
+                        nextStageNeeded = False
+                if nextStageNeeded:
+                    for leaf in self.leaf:
+                        leaf.add_level()
             else:
                 self.build_next_poss()
 
