@@ -35,6 +35,8 @@ class Start(tkinter.Tk):
         self.columnconfigure(1, weight=0)
         self.columnconfigure(2, weight=1)
         self.resizable(width=False, height=False)
+        # game mode is "pvp" by default but can be changed in "ai"
+        self.mode = "pvp"
 
     def validation_player1(self):
 
@@ -49,7 +51,8 @@ class Start(tkinter.Tk):
         self.choice_pvp = tkinter.Button(self, text=u"Against player 2",
                                          command=self.validation_pvp)
         self.choice_pvp.grid(column=1, row=1)
-        self.choice_pvia = tkinter.Button(self, text=u"Against IA")
+        self.choice_pvia = tkinter.Button(self, text=u"Against AI",
+                                          command=self.validation_AI)
         self.choice_pvia.grid(column=2, row=1)
 
     def entrer_player1(self, event):
@@ -72,8 +75,13 @@ class Start(tkinter.Tk):
         self.validation2.grid(column=2, row=1)
 
     def validation_player2(self):
-        self.name_player2.set(
-                             self.field_player2.get())
+        self.name_player2.set(self.field_player2.get())
+        self.quit()
+
+    def validation_AI(self):
+        self.name_player2 = tkinter.StringVar()
+        self.name_player2.set(u"Computer")
+        self.mode = "ai"
         self.quit()
 
     def entrer_player2(self, event):

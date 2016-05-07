@@ -9,16 +9,17 @@ from QTree import *
 
 class Main_game_display(tkinter.Tk):
 
-    def __init__(self, parent, player1, player2):
+    def __init__(self, parent, player1, player2, mode):
         tkinter.Tk.__init__(self, parent)
         self.parent = parent
-        self.initialize(player1, player2)
+        self.initialize(player1, player2, mode)
 
-    def initialize(self, player1, player2):
+    def initialize(self, player1, player2, mode):
         # player_main is the main player
         self.player1 = player1
         self.player2 = player2
         self.player_main = self.player1
+        self.mode = mode
         self.grid()
         # definition of pieces and board area
         self.define_pieces()
@@ -140,7 +141,7 @@ piece on the board.".format(self.player_main))
             self.v.set(16)
             # AI MODE
             # in case of AI mode chosen
-            if (self.player_main == "ai"):
+            if (self.mode == "ai" and self.player_main == "Computer"):
                 self.aiTurn()
 
     def change_player(self):
