@@ -144,6 +144,9 @@ piece on the board.".format(self.player_main))
                 self.aiTurn()
 
     def change_player(self):
+        """
+        Change the main player
+        """
         if self.player_main is self.player1:
             self.player_main = self.player2
         else:
@@ -153,6 +156,11 @@ piece on the board.".format(self.player_main))
         if self.board.test_victory():
             self.text_instruction.set("CONGRATULATION {}, you \
 won.".format(self.player_main))
+            self.button_selec.config(state='disabled')
+            for elt in self.board.piecesRemaining:
+                self.pieces[elt.get_piece_id()].config(state='disabled')
+            for (r, c) in self.board.free_square():
+                self.button_square[c-1+(r-1)*4].configure(state="disabled")
 
     def aiTurn(self):
         self.chosenPiece = self.board.list_pieces[self.selection]
@@ -167,9 +175,10 @@ won.".format(self.player_main))
                 self.bestChoice = leaf
         # Bestchoice is the best move to play. The AI plays
         self.put_piece(self.bestChoice.chosenSquare)
-        firstPieceAvailable = self.board.piecesRemaining[0]
-        self.v.set(firstPieceAvailable.get_piece_id())
-        self.select()
+        if not self.board.test_victory():
+            firstPieceAvailable = self.board.piecesRemaining[0]
+            self.v.set(firstPieceAvailable.get_piece_id())
+            self.select()
 
     def quit(self):
         self.destroy()
